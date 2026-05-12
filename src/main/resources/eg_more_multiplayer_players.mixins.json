@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "games.enchanted.eg_more_multiplayer_players.common.mixin",
+  "mixinextras": {
+    "minVersion": "0.5.3"
+  },
+  "compatibilityLevel": "JAVA_${java_ver}",
+  "mixins": [
+  ],
+  "client": [
+    "IntegratedServerMixin",
+    "MultiplayerOptionsScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
