@@ -7,6 +7,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import games.enchanted.eg_more_multiplayer_players.common.duck.IntegratedServerAdditions;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.layouts.CommonLayouts;
 import net.minecraft.client.gui.layouts.LinearLayout;
@@ -14,19 +15,26 @@ import net.minecraft.client.gui.screens.MultiplayerOptionsScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.world.level.GameType;
 import org.jspecify.annotations.Nullable;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+@Debug(export = true)
 @Mixin(MultiplayerOptionsScreen.class)
 public abstract class MultiplayerOptionsScreenMixin extends Screen {
     @Shadow
     protected abstract void updateApplyChangesActiveState();
+
+    @Unique
+    private static final Component SERVER_SETTINGS_HEADER = Component.literal("Server Settings").withStyle(Style.EMPTY.withBold(true).withUnderlined(true));
 
     @Unique
     private @Nullable EditBox maxPlayersBox;
@@ -35,7 +43,7 @@ public abstract class MultiplayerOptionsScreenMixin extends Screen {
     @Unique
     private boolean maxPlayersValid = true;
     @Unique
-    private static final Component MAX_PLAYERS_TEXT = Component.literal("Max players");
+    private static final Component MAX_PLAYERS_TEXT = Component.literal("Maximum Players");
 
     protected MultiplayerOptionsScreenMixin(Component title) {
         super(title);
@@ -46,10 +54,20 @@ public abstract class MultiplayerOptionsScreenMixin extends Screen {
     @Definition(id = "PORT_INFO_TEXT", field = "Lnet/minecraft/client/gui/screens/MultiplayerOptionsScreen;PORT_INFO_TEXT:Lnet/minecraft/network/chat/Component;")
     @Expression("labeledElement(?, this.portEdit, PORT_INFO_TEXT)")
     @Inject(
-        at = @At(value = "MIXINEXTRAS:EXPRESSION"),
+        slice = @Slice(
+            from = @At(value = "MIXINEXTRAS:EXPRESSION")
+        ),
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/layouts/LinearLayout;addChild(Lnet/minecraft/client/gui/layouts/LayoutElement;)Lnet/minecraft/client/gui/layouts/LayoutElement;",
+            ordinal = 0,
+            shift = At.Shift.AFTER
+        ),
         method = "init"
     )
     private void eg_more_multiplayer_players$injectMaxPlayersBox(CallbackInfo ci, @Local(name = "content") LinearLayout content) {
+        content.addChild(new StringWidget(SERVER_SETTINGS_HEADER, this.font));
+
         this.maxPlayersBox = new EditBox(this.font, MAX_PLAYERS_TEXT);
         this.maxPlayersBox.setResponder((value) -> {
             Component errorMessage = this.eg_more_multiplayer_players$parseMaxPlayers(value);
