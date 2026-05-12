@@ -1,34 +1,9 @@
 # More Multiplayer Players
 
-Multi-version, multi-loader mod template for Minecraft using Stonecutter, Fabric Loom, and ModDevGradle.
+Allows you to increase the maximum amount of players who can join your world in Minecraft 26.2. Works with both the LAN and Online multiplayer modes!
 
-This template is set up for Minecraft 1.21.11 (fabric & neoforge) and 26.1-snapshot-1 (fabric) by default.
+<img width="2560" height="1382" alt="2026-05-12_23 46 46" src="https://github.com/user-attachments/assets/53667ed4-7a37-4524-a8e3-2d7f8d73de88" />
 
-This template was primarily made with my specific needs in mind, however you are free to expand upon and use this as a base for your own mods
+## License
 
-## Setup
-
-1. Find and replace all instances of `eg_more_multiplayer_players` with your mod id. Do the same for `Enchanted's Template Mod` with your mod name
-2. Update `mod.group` in gradle.properties, then rename `src/main/java/games/enchanted/eg_more_multiplayer_players/` to `src/main/java/{group}/{mod id}`
-3. Rename `src/main/resources/eg_more_multiplayer_players.mixins.json` to your mod id
-4. Make sure the project and gradle is configured to use Java 25 your IDE
-5. Let gradle sync and you should be good to go!
-
-## More info
-- Change Minecraft versions in settings.gradle.kts
-   - By default there are buildscripts for Fabric (remap, >=1.14), Fabric (>=26.1), and NeoForge (>1.20.2), if you need other versions you may make your own buildscripts for them
-- Use the stonecutter gradle tasks to switch between versions, run configurations should be generated automatically
-- Set up to handle ClassTweakers and AccessTransformers automatically
-   - for fabric place them under `src/main/resources/{mod id}.classtweaker`
-   - for neoforge place them under `src/main/resources/META-INF/accesstransformer.cfg`
-
-## Publishing (optional)
-Publishing is disabled by default, to enable it:
-1. Uncomment `publish.modrinth` and/or `publish.curseforge` in gradle.properties and fill in your modrinth/curseforge project ids
-2. Copy and paste .env.template as .env, and enter in your modrinth and/or curseforge api keys. **IMPORTANT: Keep this file private! Do not share it anywhere**
-    - Modrinth: generate a [PAT](https://modrinth.com/settings/pats) with the Create, Read, and Write Versions scopes
-    - Curseforge: generate an [Api Token](https://legacy.curseforge.com/account/api-tokens)
-
-Once set up, you can publish by:
-1. Run `./gradlew publishMods` and check the information is correct
-2. Set `publish.dry_run` to false in gradle.properties, then run the above command again to publish
+More Multiplayer Players by <a href="https://enchanted.games">ioblackshaw (a.k.a. Enchanted_Games)</a> is licensed under <a href="https://polyformproject.org/licenses/shield/1.0.0" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">Polyform Shield License 1.0.0</a>
